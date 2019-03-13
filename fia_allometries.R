@@ -77,7 +77,7 @@ for(i in seq_along(fia_spcd)){
   spp_sub <- ab_tmp[ab_tmp$spcd == spp, ]
   
   samp_sub <- sapply(seq_len(nrow(spp_sub)), function(x){
-    samp_ind <- sample(1:dim(samp_sub)[1], 250)
+    samp_ind <- sample(1:dim(samp_sub)[1], 250) # use 250 iters
     ab_samps <- samp_sub[samp_ind, which(colnames(samp_sub) == spp_sub$dbh[x])]  
     res <- c(spp_sub$dbh[x], spp_sub$dens[x], spp_sub$spcd[x], ab_samps* 1e-03) # kg to Mg
     return(res)
@@ -90,5 +90,6 @@ for(i in seq_along(fia_spcd)){
 
 # the resulting lookup table
 ab_lut <- do.call("rbind", collect_list)
-
+#> dim(ab_lut)
+#[1] 365800    253
 
