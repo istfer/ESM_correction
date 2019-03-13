@@ -1,5 +1,10 @@
+# 1. Read in FIA query results
+# 2. Fit allometries to get biomass given tree species and diameter
+# 3. Re-format to obtain lookup table
+
 library(data.table)
 
+### 1. Read in FIA query results
 file.in.normal = ".../ESM.rds" 
 
 q <- as.data.table(readRDS(file.in.normal))
@@ -16,6 +21,8 @@ agb_samp_list <- list()
 
 outdir <- ".../allometry_files"
 
+
+### 2. Fit allometries to get biomass given tree species and diameter
 
 # fit allometries, loop over species
 no_data_spp <- rep(1, length(fia_spcd))
@@ -43,6 +50,8 @@ save(agb_samp_list, file = "agb_samples.Rdata")
 # agb_samp_list is a list of length length(fia_spcd)
 # i.e. each sublist is a species, N_samples x DBH_class (actually not a class but unique DBH values that are in the FIA database for that species)
 
+
+### 3. Re-format to obtain lookup table
 # create ab lookup table
 # it will have 250 + 3 columns, dbh (in cm), dens (in trees ha-1), spcd, 205 iterations for ab (in  Mg trees-1)
 
