@@ -30,7 +30,7 @@ ablut_validation <- function(allom.fit, hf_raw, site_id = 1, years){
       sub_plot$taxon <- as.character(sub_plot$taxon)
       sub_plot$taxon[sub_plot$taxon == "BEAL"] <- "BEAL2"
       sub_plot$taxon[sub_plot$taxon == "PRSE"] <- "PRSE2"
-      
+      sub_plot$taxon[sub_plot$taxon == "ACSA"] <- "ACSA3"     
       
       sub_spps <- unique(sub_plot$taxon)
       
