@@ -1,13 +1,12 @@
 ## This code provides a validation that the way I do the allometry calculation agrees with the PalEON model estimates.
 library(PEcAn.allometry)
 
-file.in.model  = "/fs/data3/istfer/fia_esm/scripts/fading_record/HF_DBH_AB_tree_iter.RDS"
-hf_rec = readRDS(file.in.model)
-hf_raw <- hf_rec[hf_rec$model == "Model RW + Census" , ]
-years <- 2012:1960
-site_id <- 1
+file.in.model  <- "/fs/data3/istfer/fia_esm/scripts/fading_record/HF_DBH_AB_tree_iter.RDS"
+hf_rec         <- readRDS(file.in.model)
+hf_raw         <- hf_rec[hf_rec$model == "Model RW + Census" , ]
+years          <- 2012:1960
 
-allom.fit <- load.allom('allometry_files/')
+allom.fit      <- load.allom('allometry_files/')
 
 
 ablut_validation <- function(allom.fit, hf_raw, site_id = 1, years){
@@ -49,17 +48,14 @@ ablut_validation <- function(allom.fit, hf_raw, site_id = 1, years){
                             use = "Bg",
                             interval = "prediction", 
                             single.tree = FALSE)
-      
-      # process preds here (otherwise reulsting objects will get very big)
-      # draw 1 sample from each tree
+
       ngibbs   <-  dim(pred[[1]])[1]
-      
       
       draws <- sapply(pred, function(x) x[sample(seq(1,ngibbs), 250),,])
       if(is(draws, "list")) draws <- do.call("cbind", draws)
       draw_Mg <- draws * 1e-03 # kg to Mg
       draw_plt <- draw_Mg / (20^2*pi) # Mg/m2
-      draw_con <- draw_plt / 1e-04  # Mg/acre to  # Mg/ha
+      draw_con <- draw_plt / 1e-04  # Mg/m2 to Mg/ha
       draw_fnl <- apply(draw_con,1,sum)
       
       ab_list[[y]][[i]] <- draw_fnl
