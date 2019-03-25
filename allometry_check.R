@@ -1,12 +1,12 @@
 ## This code provides a validation that the way I do the allometry calculation agrees with the PalEON model estimates.
 library(PEcAn.allometry)
 
-file.in.model  <- "/fs/data3/istfer/fia_esm/scripts/fading_record/HF_DBH_AB_tree_iter.RDS"
+file.in.model  <- ".../HF_DBH_AB_tree_iter.RDS"
 hf_rec         <- readRDS(file.in.model)
 hf_raw         <- hf_rec[hf_rec$model == "Model RW + Census" , ]
 years          <- 2012:1960
 
-allom.fit      <- load.allom('allometry_files/')
+allom.fit      <- load.allom('.../allometry_files/')
 
 
 ablut_validation <- function(allom.fit, hf_raw, site_id = 1, years){
