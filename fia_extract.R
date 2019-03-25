@@ -349,7 +349,7 @@ fia_extract <- function(file.out, file.pft, fading_record = FALSE){
     
     # Initial number of trees is current survivors plus those that died during the resurvey period.
     GRM[, start1tpa      := SURVIVORTPA + MORTALITYTPA                  ]
-
+    
     # Final number of trees is current survivors plus new trees that cross the 5" threshold
     GRM[, end1tpa        := SURVIVORTPA + INGROWTHTPA                   ]
     
@@ -358,9 +358,10 @@ fia_extract <- function(file.out, file.pft, fading_record = FALSE){
     # no mortality
     GRM[, start1tpa      := SURVIVORTPA                   ]
     
-    GRM[, end1tpa        := SURVIVORTPA + INGROWTHTPA     ]
-    
+    # no ingrowth
+    GRM[, end1tpa        := SURVIVORTPA                   ]
   }
+  
 
   GRM[, PREVTPAsum     := sumNA(start1tpa), by=PLT_CN                 ]  # "startsumTPA"
   GRM[, TPAsum         := sumNA(end1tpa), by=PLT_CN                   ]  # "endsumTPA"
@@ -452,10 +453,6 @@ fia_extract <- function(file.out, file.pft, fading_record = FALSE){
   ALL[, c("STATECD.x","CONmax.x") := list(NULL,NULL)]
   setnames(ALL, c("STATECD.y","CONmax.y"), c("STATECD","CONmax"))
   setnames(ALL, "START", "PREVYR")
-  
-  ALL = merge(GRM, PC, by='PLT_CN')
-  setnames(ALL, "START", "PREVYR")
-  
   
   # --- Save outputs
   cat("Save...\n")

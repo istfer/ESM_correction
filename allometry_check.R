@@ -33,7 +33,7 @@ ablut_validation <- function(allom.fit, hf_raw, site_id = 1, years){
       
       sub_spps <- unique(sub_plot$taxon)
       
-      
+      sub_plot$dbh <- sub_plot$dbh +  (record_nf[["prevdiamean.m"]]  - record_nf[["diamean.m"]])  * scale_dbh
       dbh_list <- list()
       for(si in seq_along(sub_spps)){
         dbh_list[[si]]  <- matrix((sub_plot$dbh[sub_plot$taxon== sub_spps[si]]), ncol=1)  
@@ -52,11 +52,14 @@ ablut_validation <- function(allom.fit, hf_raw, site_id = 1, years){
       ngibbs   <-  dim(pred[[1]])[1]
       
       draws <- sapply(pred, function(x) x[sample(seq(1,ngibbs), 250),,])
+      #draws <- sapply(pred, function(x) x[sample(seq(1,ngibbs), 1),,])
       if(is(draws, "list")) draws <- do.call("cbind", draws)
+      if(is(draws, "list")) draws <- unlist(draws)
       draw_Mg <- draws * 1e-03 # kg to Mg
       draw_plt <- draw_Mg / (20^2*pi) # Mg/m2
       draw_con <- draw_plt / 1e-04  # Mg/m2 to Mg/ha
       draw_fnl <- apply(draw_con,1,sum)
+      #draw_fnl <- sum(draw_con)
       
       ab_list[[y]][[i]] <- draw_fnl
       pal_list[[y]][[i]] <- sum(sub_plot$ab)
